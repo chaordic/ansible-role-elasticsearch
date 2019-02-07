@@ -12,7 +12,7 @@ node.name: {{inventory_hostname}}-{{es_instance_name}}
 {% endif %}
 
 {% if es_config['http.port'] is defined %}
-http.port: 9200
+http.port: {{ es_config['http.port'] }}
 {% endif %}
 
 #################################### Paths ####################################
