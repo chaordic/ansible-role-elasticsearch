@@ -22,14 +22,23 @@ Group={{es_group}}
 ExecStartPre=/usr/share/elasticsearch/bin/elasticsearch-systemd-pre-exec
 {% endif %}
 
+{% if  es_major_version == "2.x"  %}
 ExecStart={{es_home}}/bin/elasticsearch \
-                                    -p ${PID_DIR}/elasticsearch.pid \
-{% if (es_version | version_compare('6.0.0', '<')) %}
-                                    -Edefault.path.logs=${LOG_DIR} \
-                                    -Edefault.path.data=${DATA_DIR} \
-                                    -Edefault.path.conf=${CONF_DIR} \
+  -Des.pidfile=${PID_DIR}/elasticsearch.pid \
+  -Des.default.path.home=${ES_HOME} \
+  -Des.default.path.logs=${LOG_DIR} \
+  -Des.default.path.data=${DATA_DIR} \
+  -Des.default.path.conf=${CONF_DIR}
 {% endif %}
-                                    --quiet
+
+{% if  es_major_version == "5.x"  %}
+ExecStart={{es_home}}/bin/elasticsearch \
+  -p ${PID_DIR}/elasticsearch.pid \
+  -Edefault.path.logs=${LOG_DIR} \
+  -Edefault.path.data=${DATA_DIR} \
+  -Edefault.path.conf=${CONF_DIR} \
+  --quiet
+{% endif %}
 
 
 # StandardOutput is configured to redirect to journalctl since
